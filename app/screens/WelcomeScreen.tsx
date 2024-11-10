@@ -1,109 +1,172 @@
-import { observer } from "mobx-react-lite"
-import { FC } from "react"
-import { Image, ImageStyle, TextStyle, View, ViewStyle } from "react-native"
-import { Button, Text, Screen } from "@/components"
-import { isRTL } from "../i18n"
-import { useStores } from "../models"
-import { AppStackScreenProps } from "../navigators"
-import type { ThemedStyle } from "@/theme"
-import { useHeader } from "../utils/useHeader"
-import { useSafeAreaInsetsStyle } from "../utils/useSafeAreaInsetsStyle"
-import { useAppTheme } from "@/utils/useAppTheme"
+/* eslint-disable react-native/no-color-literals */
+import { navigate } from "@/navigators"
+import { useState } from "react"
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView } from "react-native"
 
-const welcomeLogo = require("../../assets/images/logo.png")
-const welcomeFace = require("../../assets/images/welcome-face.png")
+const COLOR_OPTIONS = [
+  "#4285F4",
+  "#00C853",
+  "#E91E63",
+  "#FF8F00",
+  "#FF5252",
+  "#009688",
+  "#9C27B0",
+  "#F44336",
+  "#E040FB",
+  "#607D8B",
+]
 
-interface WelcomeScreenProps extends AppStackScreenProps<"Welcome"> {}
+export const WelcomeScreen = () => {
+  const [deviceId, setDeviceId] = useState("")
+  const [deviceName, setDeviceName] = useState("")
+  const [selectedColor, setSelectedColor] = useState(COLOR_OPTIONS[0])
 
-export const WelcomeScreen: FC<WelcomeScreenProps> = observer(function WelcomeScreen(_props) {
-  const { themed, theme } = useAppTheme()
-
-  const { navigation } = _props
-  const {
-    authenticationStore: { logout },
-  } = useStores()
-
-  function goNext() {
-    navigation.navigate("Demo", { screen: "DemoShowroom", params: {} })
+  function goToNextPage() {
+    navigate("Device", { deviceId, deviceName })
   }
 
-  useHeader(
-    {
-      rightTx: "common:logOut",
-      onRightPress: logout,
-    },
-    [logout],
-  )
-
-  const $bottomContainerInsets = useSafeAreaInsetsStyle(["bottom"])
-
   return (
-    <Screen preset="fixed">
-      <View style={themed($topContainer)}>
-        <Image style={themed($welcomeLogo)} source={welcomeLogo} resizeMode="contain" />
-        <Text
-          testID="welcome-heading"
-          style={themed($welcomeHeading)}
-          tx="welcomeScreen:readyForLaunch"
-          preset="heading"
-        />
-        <Text tx="welcomeScreen:exciting" preset="subheading" />
-        <Image
-          style={$welcomeFace}
-          source={welcomeFace}
-          resizeMode="contain"
-          tintColor={theme.isDark ? theme.colors.palette.neutral900 : undefined}
-        />
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>ENTER DEVICE INFO</Text>
+
+      <View style={styles.inputContainer}>
+        <View style={styles.inputWrapper}>
+          <Text style={styles.label}>
+            Device ID <Text style={styles.infoIcon}>ⓘ</Text>
+          </Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter unique number"
+            value={deviceId}
+            onChangeText={setDeviceId}
+          />
+          {/* <TouchableOpacity style={styles.validateButton}>
+            <Text style={styles.validateButtonText}>VALIDATE</Text>
+          </TouchableOpacity> */}
+        </View>
+
+        <View style={styles.inputWrapper}>
+          <Text style={styles.label}>
+            Device Name <Text style={styles.required}>*</Text>
+          </Text>
+          <TextInput
+            style={styles.input}
+            placeholder="device name"
+            value={deviceName}
+            onChangeText={setDeviceName}
+          />
+        </View>
+
+        <Text style={styles.label}>Colour Tag</Text>
+        <View style={styles.colorGrid}>
+          {COLOR_OPTIONS.map((color) => (
+            <TouchableOpacity
+              key={color}
+              style={[
+                styles.colorOption,
+                { backgroundColor: color },
+                selectedColor === color && styles.selectedColor,
+              ]}
+              onPress={() => setSelectedColor(color)}
+            />
+          ))}
+        </View>
       </View>
 
-      <View style={themed([$bottomContainer, $bottomContainerInsets])}>
-        <Text tx="welcomeScreen:postscript" size="md" />
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.addButton} activeOpacity={1} onPress={goToNextPage}>
+          <Text style={styles.addButtonText}>ADD DEVICE</Text>
+        </TouchableOpacity>
 
-        <Button
-          testID="next-screen-button"
-          preset="reversed"
-          tx="welcomeScreen:letsGo"
-          onPress={goNext}
-        />
+        <TouchableOpacity style={styles.cancelButton}>
+          <Text style={styles.cancelButtonText}>CANCEL</Text>
+        </TouchableOpacity>
       </View>
-    </Screen>
+    </SafeAreaView>
   )
-})
-
-const $topContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
-  flexShrink: 1,
-  flexGrow: 1,
-  flexBasis: "57%",
-  justifyContent: "center",
-  paddingHorizontal: spacing.lg,
-})
-
-const $bottomContainer: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
-  flexShrink: 1,
-  flexGrow: 0,
-  flexBasis: "43%",
-  backgroundColor: colors.palette.neutral100,
-  borderTopLeftRadius: 16,
-  borderTopRightRadius: 16,
-  paddingHorizontal: spacing.lg,
-  justifyContent: "space-around",
-})
-
-const $welcomeLogo: ThemedStyle<ImageStyle> = ({ spacing }) => ({
-  height: 88,
-  width: "100%",
-  marginBottom: spacing.xxl,
-})
-
-const $welcomeFace: ImageStyle = {
-  height: 169,
-  width: 269,
-  position: "absolute",
-  bottom: -47,
-  right: -80,
-  transform: [{ scaleX: isRTL ? -1 : 1 }],
 }
 
-const $welcomeHeading: ThemedStyle<TextStyle> = ({ spacing }) => ({
-  marginBottom: spacing.md,
+const styles = StyleSheet.create({
+  addButton: {
+    alignItems: "center",
+    backgroundColor: "#4285F4",
+    borderRadius: 8,
+    padding: 15,
+  },
+  addButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  buttonContainer: {
+    gap: 10,
+  },
+  cancelButton: {
+    alignItems: "center",
+    backgroundColor: "#F8F9FA",
+    borderRadius: 8,
+    padding: 15,
+  },
+  cancelButtonText: {
+    color: "#4285F4",
+    fontWeight: "bold",
+  },
+  colorGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
+    marginTop: 10,
+  },
+  colorOption: {
+    borderRadius: 8,
+    height: 50,
+    width: 50,
+  },
+  container: {
+    backgroundColor: "#fff",
+    flex: 1,
+    padding: 20,
+  },
+  infoIcon: {
+    color: "#4285F4",
+  },
+  input: {
+    backgroundColor: "#F8F9FA",
+    borderColor: "#E1E1E1",
+    borderRadius: 8,
+    borderWidth: 1,
+    padding: 12,
+  },
+  inputContainer: {
+    flex: 1,
+  },
+  inputWrapper: {
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 16,
+    marginBottom: 8,
+  },
+  required: {
+    color: "red",
+  },
+  selectedColor: {
+    borderColor: "#000",
+    borderWidth: 2,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 30,
+    textAlign: "center",
+  },
+  // validateButton: {
+  //   alignItems: "flex-end",
+  //   justifyContent: "flex-end",
+  //   marginRight: 10,
+  //   marginTop: -35,
+  // },
+  // validateButtonText: {
+  //   color: "#4285F4",
+  //   fontWeight: "bold",
+  // },
 })

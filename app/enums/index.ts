@@ -1,0 +1,31 @@
+export enum MainsEnum {
+  ON = "ON",
+  OFF = "OFF",
+}
+
+export enum MotorControlEnum {
+  MANUAL = "MANUAL",
+  AUTO = "AUTO",
+}
+
+export enum DeviceEnum {
+  CONNECTED = "CONNECTED",
+  DISCONNECTED = "DISCONNECTED",
+}
+
+export enum Colors {
+  CONNECTED_BACKGROUND_COLOR = "#dcfaee",
+  DISCONNECTED_BACKGROUND_COLOR = "#ffdfe0",
+  CONNECTED_TEXT_COLOR = "#02BF91",
+  DISCONNECTED_TEXT_COLOR = "#E53D62",
+  DEVICE_HEADER_BACKGROUND_COLOR = "#D97706",
+  SLIDE_BUTTON_BACKGROUND_COLOR = "#F3F3F3",
+  SLIDE_BUTTON_TEXT_COLOR = "#FFF",
+}
+
+export enum MQTT_CONFIG {
+  KEEP_ALIVE_INTERVAL = 60, // Seconds
+  TIMEOUT = 3, // Seconds
+  RECONNECT_ATTEMPTS = 5,
+  RECONNECT_DELAY = 2000, // 2 seconds
+}

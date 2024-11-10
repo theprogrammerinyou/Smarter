@@ -1,10 +1,8 @@
 {
-  "name": "MQTTClientApp",
-  "displayName": "MQTTClientApp",
   "expo": {
-    "name": "MQTTClientApp",
-    "slug": "MQTTClientApp",
-    "scheme": "mqttclientapp",
+    "name": "Smarter",
+    "slug": "smarter",
+    "scheme": "smarter",
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
@@ -18,12 +16,11 @@
       "fallbackToCacheTimeout": 0
     },
     "jsEngine": "hermes",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "android": {
       "icon": "./assets/images/app-icon-android-legacy.png",
-      "package": "com.mqttclientapp",
+      "package": "com.smarter",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/app-icon-android-adaptive-foreground.png",
         "backgroundImage": "./assets/images/app-icon-android-adaptive-background.png"
@@ -37,7 +34,7 @@
     "ios": {
       "icon": "./assets/images/app-icon-ios.png",
       "supportsTablet": true,
-      "bundleIdentifier": "com.mqttclientapp",
+      "bundleIdentifier": "com.smarter",
       "splash": {
         "image": "./assets/images/splash-logo-ios-mobile.png",
         "tabletImage": "./assets/images/splash-logo-ios-tablet.png",
@@ -51,29 +48,12 @@
         "image": "./assets/images/splash-logo-web.png",
         "resizeMode": "contain",
         "backgroundColor": "#191015"
-      },
-      "bundler": "metro"
+      }
     },
-    "plugins": [
-      "expo-localization",
-      [
-        "expo-build-properties",
-        {
-          "ios": {
-            "newArchEnabled": false
-          },
-          "android": {
-            "newArchEnabled": false
-          }
-        }
-      ],
-      "expo-font"
-    ],
-    "experiments": {
-      "tsconfigPaths": true
+    "extra": {
+      "eas": {
+        "projectId": "a8050255-e15f-4414-9276-8013595e7b8b"
+      }
     }
-  },
-  "ignite": {
-    "version": "10.0.4"
   }
 }
